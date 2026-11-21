@@ -19,3 +19,7 @@ Icon[
 *.gz
 *.parquet
 *.zip
+CLAUDE.md
+AGENTS.md
+.github
+.cursor/rules
