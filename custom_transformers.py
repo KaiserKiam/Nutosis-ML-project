@@ -6,7 +6,7 @@ Kept in a .py file so preprocessor.pkl can be loaded in other notebooks.
 import numpy as np
 import pandas as pd
 from sklearn import set_config
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin, clone
 
 # text helpers from exploration
 from squirrel_pipeline import (  # noqa: F401
@@ -172,3 +172,33 @@ class SightingHeightTransformer(BaseEstimator, TransformerMixin):
 
     def get_feature_names_out(self, input_features=None):
         return np.array([self.feature_name])
+
+
+class GroupThresholdClassifier(ClassifierMixin, BaseEstimator):
+    """Wraps a fitted-able classifier so some groups get their own threshold
+    (e.g. gray squirrels at 0.3, everyone else at 0.5)"""
+
+    def __init__(self, estimator=None, group_col="Primary Fur Color", group_thresholds=None, default_threshold=0.5):
+        self.estimator = estimator
+        self.group_col = group_col
+        self.group_thresholds = group_thresholds
+        self.default_threshold = default_threshold
+
+    def fit(self, X, y, **fit_params):
+        self.estimator_ = clone(self.estimator).fit(X, y, **fit_params)
+        self.classes_ = self.estimator_.classes_
+        return self
+
+    def predict_proba(self, X):
+        return self.estimator_.predict_proba(X)
+
+    def _thresholds(self, X):
+        group = _as_frame(X)[self.group_col].astype("string").str.strip()
+        t = np.full(len(group), self.default_threshold, dtype=float)
+        for g, thr in (self.group_thresholds or {}).items():
+            t[group.eq(g).fillna(False).to_numpy()] = thr
+        return t
+
+    def predict(self, X):
+        proba = self.predict_proba(X)[:, 1]
+        return self.classes_[(proba >= self._thresholds(X)).astype(int)]
