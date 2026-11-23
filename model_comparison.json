@@ -1,0 +1,71 @@
+{
+  "default": {
+    "nb": {
+      "f2": 0.5343,
+      "recall": 0.656,
+      "precision": 0.3408
+    },
+    "logreg": {
+      "f2": 0.4863,
+      "recall": 0.4587,
+      "precision": 0.6529
+    },
+    "hgb": {
+      "f2": 0.4384,
+      "recall": 0.4127,
+      "precision": 0.5887
+    },
+    "mlp": {
+      "f2": 0.4341,
+      "recall": 0.4226,
+      "precision": 0.488
+    },
+    "rf": {
+      "f2": 0.4301,
+      "recall": 0.3996,
+      "precision": 0.6216
+    },
+    "tree": {
+      "f2": 0.4034,
+      "recall": 0.4093,
+      "precision": 0.3832
+    },
+    "svc": {
+      "f2": 0.3734,
+      "recall": 0.3333,
+      "precision": 0.7335
+    },
+    "knn": {
+      "f2": 0.187,
+      "recall": 0.1587,
+      "precision": 0.6903
+    }
+  },
+  "tuned": {
+    "hgb": {
+      "f2": 0.655,
+      "recall": 0.7295,
+      "precision": 0.4671,
+      "f2_std": 0.0494
+    },
+    "logreg": {
+      "f2": 0.6478,
+      "recall": 0.7064,
+      "precision": 0.4872,
+      "f2_std": 0.0546
+    },
+    "voting": {
+      "f2": 0.6391,
+      "recall": 0.7062,
+      "precision": 0.4645,
+      "f2_std": 0.0367
+    },
+    "nb": {
+      "f2": 0.6151,
+      "recall": 0.7027,
+      "precision": 0.4118,
+      "f2_std": 0.0316
+    }
+  },
+  "final_model": "hgb"
+}
